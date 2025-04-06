@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODT to Markdown Converter</title>
+    <script src="odt.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<!-- Ensure odt.js is in your project directory -->
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        .container { max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background: #f9f9f9; }
+        input[type="file"] { margin: 10px 0; }
+        button { background: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+        button:hover { background: #218838; }
+		textarea { width: 80%; height: 200px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Convert ODT to Markdown</h2>
+        <input type="file" id="fileInput" accept=".odt">
+        <br>
+        <button id="convertButton">Convert</button>
+        <h3>Converted Markdown:</h3>
+    <textarea id="output" readonly></textarea>
+    <br>
+    <button id="downloadBtn" onclick="downloadMarkdown()">Download Markdown</button>
+    </div>
+
+    <script>
+        let markdownContent = "";
+
+        document.getElementById("convertButton").addEventListener("click", function () {
+    var fileInput = document.getElementById("fileInput").files[0];
+
+    if (!fileInput) {
+        alert("Please select an ODT file!");
+        return;
+    }
+
+    ODT.parse(fileInput, function (error, markdownContent) {
+        if (error) {
+            console.error("Error parsing ODT:", error);
+            alert("Error processing file!");
+        } else {
+            document.getElementById("output").textContent = markdownContent;
+            document.getElementById("downloadBtn").style.display = "inline-block";
+        }
+    });
+});
+				
+		function downloadMarkdown() {
+    let outputElement = document.getElementById("output");
+    let markdownContent = outputElement.textContent || outputElement.innerText;
+
+    if (!markdownContent || markdownContent.trim() === "") {
+        alert("Error: No content to save!");
+        console.error("Download failed: markdownContent is empty.");
+        return;
+    }
+
+    console.log("Markdown content to be saved:", markdownContent); // Debugging output
+
+    const blob = new Blob([markdownContent], { type: "text/markdown" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "converted.md";
+    link.click();
+}
+
+    </script>
+</body>
+</html>

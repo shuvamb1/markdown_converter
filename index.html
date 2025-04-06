@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Converter</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        .container { max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background: #f9f9f9; }
+        input[type="file"] { margin: 10px 0; }
+        button { background: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+        button:hover { background: #218838; }
+		textarea { width: 80%; height: 200px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div style="display:flex">
+    <div class="container" style="margin:4%">
+        <h2>Convert ODT to Markdown</h2><br><br>
+        <button id="convertButton">Click here</button>
+    </div>
+	<div class="container" style="margin:4%">
+	<h2>Convert DOCX to Markdown</h2><br><br>
+    <button id="convert">Click here</button>
+</div>
+	<div class="container" style="margin:4%">
+    <h2>Convert HTML to Markdown</h2><br><br>
+    <button id="s">Click here</button>
+</div>
+</div>
+    <script>
+       document.getElementById('convertButton').addEventListener('click', function() {
+            window.location.href = 'odttomd.html';
+        });
+        document.getElementById('convert').addEventListener('click', function() {
+            window.location.href = 'doctomd.html';
+        });
+		document.getElementById('s').addEventListener('click', function() {
+            window.location.href = 'htmltomd.html';
+        });
+    </script>
+</body>
+</html>

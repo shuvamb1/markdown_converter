@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCX to Markdown Converter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        .container { max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background: #f9f9f9; }
+        input[type="file"] { margin: 10px 0; }
+        button { background: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+        button:hover { background: #218838; }
+		textarea { width: 80%; height: 200px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+	<h2>DOCX to Markdown Converter</h2>
+    <input type="file" id="upload" accept=".docx">
+    <button id="convert">Convert</button>
+    <h3>Converted Markdown:</h3>
+    <textarea id="output" readonly></textarea>
+    <br>
+    <button onclick="downloadMarkdown()">Download Markdown</button>
+</div>
+    <script>
+
+        document.getElementById('convert').addEventListener('click', function() {
+            const fileInput = document.getElementById('upload');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please upload a .docx file first.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const arrayBuffer = event.target.result;
+
+                mammoth.convertToMarkdown({ arrayBuffer: arrayBuffer })
+                    .then(function(result) {
+                        const markdown = result.value; // The generated Markdown
+                        document.getElementById('output').value = markdown;
+                    })
+                    .catch(function(err) {
+                        console.error(err);
+                        alert('Error converting file: ' + err.message);
+                    });
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+		function downloadMarkdown() {
+            const markdownContent = document.getElementById("output").value;
+            if (!markdownContent.trim()) {
+                alert("No content to download.");
+                return;
+            }
+            
+            const blob = new Blob([markdownContent], { type: "text/markdown" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "converted.md";
+            link.click();
+        }
+    </script>
+</body>
+</html>
